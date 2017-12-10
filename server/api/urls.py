@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import CreateView, DetailsView, UserView, UserDetailsView
-from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = {
     url(r'^messages/$', CreateView.as_view(), name="create"),
@@ -12,7 +12,7 @@ urlpatterns = {
     url(r'^users/$', UserView.as_view(), name="users"),
     url(r'users/(?P<pk>[0-9]+)/$',
         UserDetailsView.as_view(), name="user_details"),
-    url(r'^get-token/', obtain_auth_token),
+    url(r'^get-token/', obtain_jwt_token),
 }
 
 urlpatterns = format_suffix_patterns(urlpatterns)

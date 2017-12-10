@@ -11,29 +11,29 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   @Output() logoutEmitter = new EventEmitter<void>();
   textError = '';
 
-	messages = [];
-	interval = null;
+  messages = [];
+  interval = null;
 
   constructor() { }
 
   onReceive() {
-		axios.create({
-		  baseURL: 'http://localhost:8000',
-		  headers: { 'Authorization': 'Token ' + this.token }
-		})
-  	.get('/messages/')
-  	.then(response => this.messages = response.data.reverse())
-  	.catch(error => console.log(error.response.data));
+    axios.create({
+      baseURL: 'http://localhost:8000',
+      headers: { 'Authorization': 'JWT ' + this.token }
+    })
+    .get('/messages/')
+    .then(response => this.messages = response.data.reverse())
+    .catch(error => this.onLogout());
   }
 
   ngOnInit() {
-  	this.interval = setInterval(this.onReceive.bind(this), 500);
+    this.interval = setInterval(this.onReceive.bind(this), 500);
   }
 
   ngOnDestroy() {
-  	if (this.interval != null) {
-  		clearInterval(this.interval);
-  	}
+    if (this.interval != null) {
+      clearInterval(this.interval);
+    }
   }
 
   onLogout() {
@@ -41,15 +41,16 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   }
 
   onSend(text) {
-		axios.create({
-		  baseURL: 'http://localhost:8000',
-		  headers: { 'Authorization': 'Token ' + this.token }
-		})
-  	.post('http://localhost:8000/messages/', { text: text.value })
-  	.then(response => text.value = this.textError = '')
+    axios.create({
+      baseURL: 'http://localhost:8000',
+      headers: { 'Authorization': 'JWT ' + this.token }
+    })
+    .post('http://localhost:8000/messages/', { text: text.value })
+    .then(response => text.value = this.textError = '')
     .catch(error => {
       const { text } = error.response.data;
       this.textError = text ? text.join() : '';
+      if (!text) this.onLogout();
     });
   }
 }

@@ -15,10 +15,14 @@ class MessageSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     """A user serializer to aid in authentication and authorization."""
 
-    messages = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Message.objects.all())
-
     class Meta:
         """Map this serializer to the default django user model."""
         model = User
-        fields = ('id', 'username', 'messages')
+        fields = ('id', 'username', 'password')
+
+    def create(self, validated_data):
+        user = User(**validated_data)
+        # Hash the user's password.
+        user.set_password(validated_data['password'])
+        user.save()
+        return user

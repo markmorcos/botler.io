@@ -29,6 +29,7 @@ class UserView(generics.ListCreateAPIView):
     """View to list the user queryset."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = ()
 
     def perform_create(self, serializer):
         """Save the post data when creating a new Message."""

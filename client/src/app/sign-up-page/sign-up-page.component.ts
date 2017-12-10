@@ -9,6 +9,8 @@ import axios from 'axios';
 export class SignUpPageComponent implements OnInit {
   @ViewChild('usernameInput') usernameInputRef: ElementRef;
   @ViewChild('passwordInput') passwordInputRef: ElementRef;
+  usernameError = '';
+  passwordError = '';
 
   constructor() { }
 
@@ -18,12 +20,13 @@ export class SignUpPageComponent implements OnInit {
   onSignUp() {
     const username = this.usernameInputRef.nativeElement.value;
     const password = this.passwordInputRef.nativeElement.value;
-		axios.create({
-		  baseURL: 'http://localhost:8000',
-		  headers: { 'Authorization': 'Token 3116ca2857225307f7012a3a07baea0e3f869f3d' }
-		})
-  	.post('http://localhost:8000/users/', { username, password, messages: [] })
+		axios
+  	.post('http://localhost:8000/users/', { username, password })
   	.then(response => alert('Success! You can now login.'))
-  	.catch(error => alert(JSON.stringify(error.response.data)));
+  	.catch(error => {
+      const { username, password } = error.response.data;
+      this.usernameError = username ? username.join() : '';
+      this.passwordError = password ? password.join() : '';
+    });
   }
 }

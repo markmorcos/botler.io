@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, ElementRef, EventEmitter } from '@angular/core';
 import axios from 'axios';
 
 @Component({
@@ -8,6 +8,9 @@ import axios from 'axios';
 })
 export class ChatRoomComponent implements OnInit, OnDestroy {
   @Input() token;
+  @Output() logoutEmitter = new EventEmitter<void>();
+  textError = '';
+
 	messages = [];
 	interval = null;
 
@@ -19,7 +22,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
 		  headers: { 'Authorization': 'Token ' + this.token }
 		})
   	.get('/messages/')
-  	.then(response => this.messages = response.data)
+  	.then(response => this.messages = response.data.reverse())
   	.catch(error => console.log(error.response.data));
   }
 
@@ -33,13 +36,20 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   	}
   }
 
+  onLogout() {
+    this.logoutEmitter.emit();
+  }
+
   onSend(text) {
 		axios.create({
 		  baseURL: 'http://localhost:8000',
 		  headers: { 'Authorization': 'Token ' + this.token }
 		})
   	.post('http://localhost:8000/messages/', { text: text.value })
-  	.then(response => text.value = '')
-  	.catch(error => alert(JSON.stringify(error.response.data)));
+  	.then(response => text.value = this.textError = '')
+    .catch(error => {
+      const { text } = error.response.data;
+      this.textError = text ? text.join() : '';
+    });
   }
 }

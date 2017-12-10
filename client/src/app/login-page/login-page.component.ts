@@ -10,6 +10,8 @@ export class LoginPageComponent implements OnInit {
   @ViewChild('usernameInput') usernameInputRef: ElementRef;
   @ViewChild('passwordInput') passwordInputRef: ElementRef;
   @Output() tokenEmitter = new EventEmitter<String>();
+  usernameError = '';
+  passwordError = '';
 
   constructor() { }
 
@@ -22,6 +24,10 @@ export class LoginPageComponent implements OnInit {
   	axios
   	.post('http://localhost:8000/get-token/', { username, password })
   	.then(response => this.tokenEmitter.emit(response.data.token))
-  	.catch(error => alert(JSON.stringify(error.response.data)));
+    .catch(error => {
+      const { username, password } = error.response.data;
+      this.usernameError = username ? username.join() : '';
+      this.passwordError = password ? password.join() : '';
+    });
   }
 }

@@ -6,11 +6,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  token = null;
-
   ngOnInit() { }
   
   onToken(token) {
-    this.token = token;
+  	localStorage.setItem('token', token);
+  }
+
+  getToken() {
+  	return localStorage.getItem('token');
+  }
+
+  isLoggedIn() {
+  	return this.getToken() != null;
+  }
+
+  onLogout() {
+  	localStorage.removeItem('token');
   }
 }

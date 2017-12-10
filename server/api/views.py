@@ -25,11 +25,14 @@ class DetailsView(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticated,
         IsOwner)
 
-class UserView(generics.ListAPIView):
+class UserView(generics.ListCreateAPIView):
     """View to list the user queryset."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def perform_create(self, serializer):
+        """Save the post data when creating a new Message."""
+        serializer.save()
 
 class UserDetailsView(generics.RetrieveAPIView):
     """View to retrieve a user instance."""

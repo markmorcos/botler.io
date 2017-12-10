@@ -1,6 +1,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
+      <app-sign-up-page *ngIf="token === null"></app-sign-up-page>
+      <h4><p><strong>or</strong></p></h4>
       <app-login-page (tokenEmitter)="onToken($event)" *ngIf="token === null"></app-login-page>
       <app-chat-room [token]="token" *ngIf="token !== null"></app-chat-room>
     </div>

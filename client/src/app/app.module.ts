@@ -6,12 +6,14 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { ChatRoomComponent } from './chat-room/chat-room.component';
+import { SignUpPageComponent } from './sign-up-page/sign-up-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    ChatRoomComponent
+    ChatRoomComponent,
+    SignUpPageComponent
   ],
   imports: [
     BrowserModule,

@@ -10,7 +10,7 @@ checkbox-ng==0.23
 checkbox-support==0.22
 click==0.4.43+16.4.20170613.0ubuntu1
 command-not-found==0.3
-cryptography==1.2.3
+cryptography==3.2
 cycler==0.9.0
 decorator==4.0.11
 defer==1.0.6
